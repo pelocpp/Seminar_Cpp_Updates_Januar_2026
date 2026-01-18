@@ -1240,4 +1240,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Notizzettel.txt" />
+  </ItemGroup>
 </Project>

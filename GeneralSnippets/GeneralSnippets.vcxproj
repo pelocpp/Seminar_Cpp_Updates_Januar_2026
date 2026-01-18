@@ -560,6 +560,9 @@
   <ItemGroup>
     <ClInclude Include="ScopedTimer\ScopedTimer.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Notizzettel.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

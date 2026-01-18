@@ -10,6 +10,10 @@
 
 ---
 
+Zum Notizzettel geht es [hier](Notizzettel.txt).
+
+---
+
 ## Bevor es losgeht ...
 
 *Modern C++* mag möglicherweise für den einen oder anderen Entwickler durch seine Komplexität etwas abschreckend wirken.
