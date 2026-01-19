@@ -17,7 +17,7 @@ namespace TwoPhaseNameLookup
     class Derived : public Base {
     public:
         void callBase() {
-            doSomething();
+            doSomething();  // Vererbung
         }
     };
 
@@ -33,9 +33,9 @@ namespace TwoPhaseNameLookup
     template <typename T>
     class DerivedEx : public BaseEx<T> {
     public:
-        // using BaseEx<T>::doSomething;
+        using BaseEx<T>::doSomething;
         void callBase() {
-            // doSomething();      // <=== remove comment: 
+            doSomething();      // <=== remove comment: 
             this->doSomething();
             BaseEx<T>::doSomething();
         }

@@ -142,7 +142,7 @@ i)   Vereinbarung von Variablen
 
 ii)  Rückgabetyp
 
-iii) Parameter von Funktionen:   Kommt noch !!!
+iii) Parameter von Funktionen
 
 =====================================================
 
@@ -186,3 +186,170 @@ double d2{ 123 };
 00007FF6424837FA  movsd       xmm0,mmword ptr [__real@405ec00000000000 (07FF6426C96C8h)]  
 00007FF642483802  movsd       mmword ptr [d2],xmm0  
 
+===================================================================
+
+Compiler Support:
+
+https://en.cppreference.com/w/cpp/compiler_support.html
+
+===================================================================
+
+Probably Lisp Lambdas are very different to C++ Lambdas ?!?!
+
+Hinter die Kulissen:  Lambda-Objekte
+
+Salopp:  Ein Lambma ist eine anonyme, inplace - Funktion ohne Namen.
+
+
+Historisch: 
+
+std::sort
+
+a) mit freie Funktion
+
+b) Aufrufbares Objekt.
+
+c) Lokales Aufrufbares Objekt.
+
+==> Das ist ein LAMBDA !!!!!!!!!!!
+
+// =============================================================
+
+C#:  IComparable  ==> bool equals ()
+                      bool compare 
+                      ähnlich
+
+C++: Simpler:  Wir müssen uns den Namen einer Methode (equals, compare) NICHT merken.
+  
+    Methodenschreibweise ==> Operatorenschreibweise
+
+-----------------------------------------------------
+
+Einschub:
+
+""While the signature does not need to have const&"
+
+
+        // kleierer overload: int n1  // Call-by-Value
+        int m = n1;
+00007FF67E61ABD3  mov         eax,dword ptr [n1]  
+00007FF67E61ABD9  mov         dword ptr [m],eax  
+
+
+        // groesserer Overload: int& n1   // Call-by-Reference
+        int m = n1;
+00007FF6D2D4ABD4  mov         rax,qword ptr [n1]  
+00007FF6D2D4ABDB  mov         eax,dword ptr [rax]  
+00007FF6D2D4ABDD  mov         dword ptr [m],eax  
+
+
+=========================================================
+
+
+Empfehlung: Tool
+
+Cpp Insights
+
+
+=============================================
+
+Beobachtung:
+
+Häufig:  Modern C++  ==> Umsetzung: Classic C++
+
+=============================================
+
+Lambdas sind Objekte:
+
+Objekte: Methoden und Membervariablen
+
+=============================================
+
+Generische Funktionen
+
+Pro / Contra:
+
+    static void function(auto x, int y) {
+        std::cout << "x=" << x << ", y=" << y << std::endl;
+    };
+
+Gibt es so oft wie Aufrufe mit einem anderen Datentyp im Maschinencode.
+
+Python:  Dynamische Typen: Analyse zur Laufzeit
+
+C++:  Optimale Generierung von Maschinencode:
+
+x:   ==> Parameter: Übergabe:  Stack Frame : Die sehen unterschiedlich aus.
+
+Contra: Der Maschinencode als solcher wird / ist umfangreicher.
+
+Wahrheit: Ist auch an anderen Stellen der Fall:
+
+std::vector<int>
+
+  push_back ();
+
+std::vector<double>
+
+
+=================================================
+
+Historie:
+
+     // NUR int
+    static int add(int a,  int b)
+    {
+        return a + b;
+    }
+
+    // ALLES - Solange es übersetzt :)
+    template <typename T>
+    static auto add(T a, T b)
+    {
+        return a + b;
+    }
+
+    // Nur das, was man möchte // concept
+    template <typename T>
+        requires Numerical<T>  // concept
+    static auto add(T a, T b)
+    {
+        return a + b;
+    }
+
+Bemerkung:
+
+Java, C#:
+
+interface IEnumerable
+
+   == public virtual bool MoveNext()
+   == public virtual void Reset()
+   == public virtual Object Current { get; set }
+
+class MyContainer : public IEnumerable 
+
+Ginge ......
+
+Frage: Hmmm, kann man das Feature von Interfaces (C#, Java)
+auch mit Concepts nachstellen ...
+
+// ==========================================================
+
+Ab 16 Uhr:  Vergleich  // All-In
+
+interface vs. concept
+
+Schönheit: No
+
+Performanz:
+
+interface => virtual => INDIREKTER Methodenaufruf
+
+concept => NO virtual => DIREKTER Methodenaufruf
+
+Klassischen dynamischen Polymorphismus ==> statischer Polymorphismus.
+
+Pro // Contra
+
+// ==============================================================

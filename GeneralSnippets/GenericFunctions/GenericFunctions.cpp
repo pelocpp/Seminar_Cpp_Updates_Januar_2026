@@ -9,21 +9,21 @@ namespace GenericFunctions {
     // ---------------------------------------------------------------------------------
     // generic function
 
-    static void function(auto x, int y) {
-        std::cout << "x=" << x << ", y=" << y << std::endl;
-    };
+static auto function(auto x, int y) -> void {
+    std::cout << "x=" << x << ", y=" << y << std::endl;
+};
 
-    static void test_01()
-    {
-        function(1, 123);
-        function(2.5, 123);
-        function(std::string{ "ABC" }, 123);
+static void test_01()
+{
+    function(1, 123);
+    function(2.5, 123);
+    function(std::string{ "ABC" }, 123);
 
-        // compiles too
-        function<int>(1, 123);
-        function<double>(2.5, 123);
-        function<std::string>(std::string{ "ABC" }, 123);
-    }
+    // compiles too
+    function<int>(1, 123);
+    function<double>(2.5, 123);
+    function<std::string>(std::string{ "ABC" }, 123);
+}
 
     // ---------------------------------------------------------------------------------
     // generic function - how the compiler sees them
@@ -203,10 +203,15 @@ namespace GenericLambdas {
 
 namespace GenericLambdasExample {
 
+
     static void test_01()
     {
-        // define a generic lambda
-        auto isGreaterThanFifty = [](auto n) { return n > 50; };
+        // define a generic lambda  // operator()
+        // Welche Klassen können / dürfen es denn sein ???
+        // Solange es übersetzt :)
+        auto isGreaterThanFifty = [](auto n) {
+            return n > 50;
+            };
 
         std::vector<int> intValues{ 44, 65, 22, 77, 2 };
 
@@ -214,7 +219,10 @@ namespace GenericLambdasExample {
         auto it1 = std::find_if(
             intValues.begin(),
             intValues.end(),
-            isGreaterThanFifty
+            // isGreaterThanFifty
+            [](auto n) {
+                return n > 50;
+            }
         );
         if (it1 != intValues.end()) {
             std::cout << "Found a value: " << *it1 << std::endl;
@@ -273,10 +281,16 @@ namespace GenericLambdasExample {
 namespace GenericFunctionsExample {
 
     // define a generic function (top-level (!))
-    static auto isGreaterThanFifty(auto n) { return n > 50; };
+    static auto isGreaterThanFifty(auto n) -> bool {
+        return n > 50;   // bool
+    };
 
     static void test_01()
     {
+        //auto isGreaterThanFifty(auto n) -> bool {
+        //    return n > 50;   // bool
+        //};
+
         std::vector<int> intValues{ 44, 65, 22, 77, 2 };
 
         // use generic function with a vector of integers

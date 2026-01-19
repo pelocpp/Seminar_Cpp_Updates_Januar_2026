@@ -6,8 +6,14 @@ module modern_cpp:lambda;
 
 namespace Lambdas {
 
-    static bool compare (int n1, int n2) {
-        return n1 < n2;
+    // free - function
+    static bool compare (int& n1, int n2) {
+
+        // overload
+        int m = n1;
+
+        std::cout << "bin in cmp: vgl." << n1 << " mit " << n2 << std::endl;
+        return n1 > n2;
     }
 
     class Comparer
@@ -19,7 +25,11 @@ namespace Lambdas {
         Comparer() : m_flag{ true } {}
         Comparer(bool flag) : m_flag{ flag } {}
 
-        bool operator() (int n1, int n2) const {
+        bool getFlag() const { return m_flag; }
+
+        bool operator () (int n1, int n2) const {
+
+            std::cout << "operator (): bin in cmp: vgl." << n1 << " mit " << n2 << std::endl;
             return (m_flag) ? n1 < n2 : n1 > n2;
         }
     };
@@ -28,7 +38,12 @@ namespace Lambdas {
 
     static void test_00()
     {
-        Comparer obj{ false };
+        Comparer obj{ false };   // c'tor
+
+        auto res = obj.operator() (11, 12);  
+
+        // Whyyyyyyyyyyyyyyyyyy
+        auto r =  obj(3, 4);   // abbreviated syntax  // Schreibweise mit Operatoren Stililistik
 
         bool result{ obj(1, 2) };
 
@@ -68,10 +83,12 @@ namespace Lambdas {
         }
         std::cout << std::endl;
 
+        Comparer comparer{ false };
+
         std::sort(
             vec.begin(),
             vec.end(),
-            Comparer{}  // Comparer{ false }
+            comparer
         );
 
         for (int n : vec) {
@@ -94,6 +111,8 @@ namespace Lambdas {
             LocalComparer(bool flag) : m_flag{ flag } {}
 
             bool operator() (int n1, int n2) const {
+                std::cout << "local class operator (): bin in cmp: vgl." << n1 << " mit " << n2 << std::endl;
+
                 return (m_flag) ? n1 < n2 : n1 > n2;
             }
         };
@@ -105,10 +124,28 @@ namespace Lambdas {
         }
         std::cout << std::endl;
 
+        //std::sort(
+        //    vec.begin(),
+        //    vec.end(),
+        //    LocalComparer{}  // LocalComparer{ false } // Lambda nachgestellt // erklärt
+        //);
+
+
+        //auto l = [](int n1, int n2) {
+        //    std::cout << "Lambda: bin in cmp: vgl." << n1 << " mit " << n2 << std::endl;
+        //    // return (m_flag) ? n1 < n2 : n1 > n2;
+        //    return n1 < n2;
+        //    };
+
+        bool directionFlag = false;
+
         std::sort(
             vec.begin(),
             vec.end(),
-            LocalComparer{}  // LocalComparer{ false }
+            [&] (int n1, int n2) {
+                std::cout << "Lambda: bin in cmp: vgl." << n1 << " mit " << n2 << std::endl;
+                return (directionFlag) ? n1 < n2 : n1 > n2;
+            }                     
         );
 
         for (int n : vec) {
@@ -166,25 +203,22 @@ namespace Lambdas {
 
     static void test_07() {
 
-        // defining new variables in the lambda capture:
-        // we can declare a new variable that is only visible
-        // in the scope of the lambda: We do so by defining a variable
-        // in the lambda-capture without specifying its type:
+         auto variable = 5;
 
-        // lambda with variable definition
-        auto lambda = [variable = 10] () { return variable; };
-        std::cout << lambda() << std::endl;
-
-        // Captures default to 'const value':
-        // The mutable keyword removes the 'const' qualification from all captured variables
-        auto counter = [count = 50] () mutable { 
-            ++count; 
-            return count;
+        // lambda with member variable definition
+        auto counter = [variable = 10] () mutable -> int {
+            
+           // int variable = 10;
+            ++variable;
+            return variable; 
         };
 
-        for (std::size_t i{}; i < 5; ++i) {
-            std::cout << counter() << " ";
-        }
+        variable = 999;
+
+        std::cout << counter() << std::endl;
+        std::cout << counter() << std::endl;
+        std::cout << counter() << std::endl;
+
         std::cout << std::endl;
     }
 
@@ -223,7 +257,7 @@ namespace Lambdas {
         int n = 1;
         int m = 2;
 
-        auto lambda = [=] {
+        auto lambda = [=] (){
             std::cout << "Copy:      " << n << " " << m << std::endl;
         };
 
@@ -232,22 +266,30 @@ namespace Lambdas {
 
     static auto test_09_helper_b() {
 
-        int n = 1;
+        int n = 1;   // JavaScript
         int m = 2;
+
+        //auto test_09_helper_b() {
+
+        //    n = 99;  // n liegt im Closure  // Clos 
+        //            In JavaScript liegen n und m am HEAP !!!!!!!!!!!
+        //}
 
         auto lambda = [&] {
             std::cout << "Reference: " << n << " " << m << std::endl;
         };
 
-        return lambda;  // I would't do this never ever :-)
+        return lambda;                                                                // I would't do this never ever :-)
     }
 
     static void test_09() {
 
         auto outerLambda1 = test_09_helper_a();
+
         auto outerLambda2 = test_09_helper_b();
 
         outerLambda1();
+
         outerLambda2();
     }
 
@@ -439,21 +481,21 @@ namespace Lambdas {
 void main_lambdas()
 {
     using namespace Lambdas;
-    test_00();
-    test_01();
-    test_02();
-    test_03();
-    test_04();
-    test_05();
-    test_06();
+    //test_00();
+    //test_01();
+    //test_02();
+    //test_03();
+    //test_04();
+    //test_05();
+    //test_06();
     test_07();
-    test_08();
-    test_09();
-    test_10();
-    test_11();
-    test_12();
-    test_13();
-    test_14();
+    //test_08();
+    //test_09();
+    //test_10();
+    //test_11();
+    //test_12();
+    //test_13();
+    //test_14();
 }
 
 // =====================================================================================

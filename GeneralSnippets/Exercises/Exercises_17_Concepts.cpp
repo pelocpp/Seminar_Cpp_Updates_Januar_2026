@@ -384,12 +384,14 @@ namespace Exercises_Concepts {
             // ---------------------------------------------------------------
             // with concepts
 
+            // STL : Typ sicherer machen:  Concepts
+
             template <typename T>
-            concept IsIterable = requires(T v)
+            concept IsIterable = requires (T v)
             {
                 { std::as_const(v).hasNext() } -> std::convertible_to<bool>;
                 { v.next() } -> std::same_as<int>;
-                { v.reset() }-> std::convertible_to<void>;
+                { v.reset() } -> std::convertible_to<void>;
             };
 
             template <typename T>
@@ -404,7 +406,7 @@ namespace Exercises_Concepts {
                 return count;
             }
 
-            class IterableArray
+            class IterableArray // : NO VERERBUNG // NO INTERFACE
             {
             private:
                 std::vector<int> m_array;
@@ -439,7 +441,7 @@ namespace Exercises_Concepts {
             {
                 IterableArray a{ 1, 2, 3, 4, 5 };
 
-                int count1{ getCount(a) };
+                int count1{ getCount<>(a) };
                 int count2{ getCount<IterableArray>(a) };
 
                 std::println("{}", count1);

@@ -32,11 +32,11 @@ int main()
        // main_auto();
         //main_back_inserter();
         //main_bind();
-        main_brace_initialization();
+       // main_brace_initialization();
         //main_casts();
         //main_common_type();
         //main_concepts_requires_classes();
-        //main_concepts_requires_functions();
+        main_concepts_requires_functions();
         //main_const_variants();
         //main_constexpr();
         //main_constexpr_crc();
@@ -97,7 +97,7 @@ int main()
         //main_to_underlying();
         //main_transform();
         //main_tuple(); 
-        //main_two_phase_name_lookup();
+        main_two_phase_name_lookup();
         //main_type_erasure();
         //main_type_traits();
         //main_unique_ptr();

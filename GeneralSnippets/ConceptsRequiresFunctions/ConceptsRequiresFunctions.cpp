@@ -14,6 +14,8 @@ concept NumericalEx = std::is_integral<T>::value || std::is_floating_point<T>::v
 
 namespace Requires_Clause {
 
+    // will eine kleine Lib für Arithmetik schreiben.
+
     template <typename T>
         requires Numerical<T>
     auto add(T a, T b)
@@ -31,10 +33,10 @@ namespace Requires_Clause {
 
     static void test_concepts_requires_01()
     {
-        auto sum1{ add(123.456f, 654.321f) };
+        auto sum1{ add<float>(123.456f, 654.321f) };
         std::cout << sum1 << std::endl;
 
-        auto sum2{ add(123.456, 654.321) };
+        auto sum2{ add<double>(123.456, 654.321) };
         std::cout << sum2 << std::endl;
 
         // 'add': no matching overloaded function found		
@@ -48,7 +50,7 @@ namespace Requires_Clause {
         //    the concept 'Numerical<std::string>' evaluated to false
         //    the concept 'std::floating_point<std::string>' evaluated to false
         //    the concept 'std::integral<std::string>' evaluated to false
-        // auto sum4 = add(std::string { "ABC" }, std::string { "DEF" });
+      //  auto sum4 = add<std::string>(std::string { "ABC" }, std::string { "DEF" });
     }
 
     // ---------------------------------------------------------------------------------
@@ -174,6 +176,11 @@ namespace Constrained_Template_Parameters {
 
 namespace Abbreviated_Function_Templates {
 
+    //static auto add(const Numerical auto&& a, Numerical auto b)
+    //{
+    //    return a + b;
+    //}
+
     static auto add(Numerical auto a, Numerical auto b)
     {
         return a + b;
@@ -201,7 +208,10 @@ namespace UserDefined_Concept {
     template <typename T>
     concept GreatIntegral = std::is_integral<T>::value && isGreaterThanWord<T>;
 
-    template<GreatIntegral T>
+    template <typename T>
+    concept PlainGreatIntegral = isGreaterThanWord<T>;
+
+    template<PlainGreatIntegral T>
     T incrementByOne(const T& arg) {
         return arg + 1;
     }
@@ -216,9 +226,10 @@ namespace UserDefined_Concept {
 
         n = incrementByOne(n);
 
-        // short s{ 1 };
-        // the associated constraints are not satisfied:
-        // s = incrementByOne(s);
+         short s{ 1 };
+         double d{1.0};
+       //  the associated constraints are not satisfied:
+         d = incrementByOne(d);
 
         n = incrementByTwo(n);
 
