@@ -54,13 +54,31 @@ C, C#,.NET, (Java), Mobile App (Flutter), Lisp
 
 ToDo:
 
-== Concepts
+== Concepts: Check
 
 == Multithreading (Überblick)
 
 == noexcept
 
 == emplace
+
+2. Tag:
+-------
+
+== constexpr
+
+== Smart Pointer
+
+== Varadische Templates
+
+== Folding
+
+== Utility Classes
+
+== std::variant
+
+== Bookstore Fallstudie
+
 
 // ============================================================
 
