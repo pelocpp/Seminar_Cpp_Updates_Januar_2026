@@ -262,17 +262,21 @@ namespace IdiomBigDataWithCopySwap {
         }
     }
 
+    // a = b;  // In a habe ich ein korrektes BigData Objekt (mit Pointer)
+
     BigData& BigData::operator= (BigData other) {
 
         swap(*this, other);
         return *this;
-    }
+    } // d'tor von other:  Freigabe der linken Seite  // verspätet: Freigabe der linken Seite
 
     // -------------------------------------------------------------------
 
     // move c'tor - based on so called 'swap idiom'
     BigData::BigData(BigData&& other) noexcept : BigData() {
+
         swap(*this, other);
+    
     }
 
     // move-assignment - based on so called 'swap idiom'

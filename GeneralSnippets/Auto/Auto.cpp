@@ -12,12 +12,24 @@ namespace Auto_Examples {
 
         // type deduction / type inference
 
+        // Python, JavaScript
+
+        //n = 123;   // dynamische Typen // Laufzeit ermittelt
+        //n = 1231.1231;
+
+        //var m = "asdasd";
+        //// var Dynamic Types // COM // C# 
+
+        auto k = 123.456;     // Type Deduction  // Typableitung
+
+     //   auto k2 = std::map<int, std::string>{};
+
         auto a = 1;                  // int
         auto b = 7ul;                // unsigned long
         auto c = 2.0;                // double
         auto d = 2.0f;               // float
         auto e = 'A';                // char
-        auto f = "hi";               // char const*
+        auto f = "hi";               // char const*  // Nicht: std::string
         auto g = true;               // bool
 
         auto list = { 1, 2, 3 };     // std::initializer_list<int>
@@ -43,11 +55,9 @@ namespace Auto_Examples {
 
         auto n{ 123 };                   // n is type of int
 
-        auto result{ getFunction() };    // result is type of ...
+        auto result = getFunction();     // result is type of ...
 
-        std::map<int, std::string> result2 {
-            getFunction()
-        };
+        std::map<int, std::string> result2 = getFunction();
     }
 
     // ---------------------------------------------------------------------
@@ -57,9 +67,10 @@ namespace Auto_Examples {
         std::map<int, std::string> anotherMap{ { 1, "Hello"  } };
 
         std::map<int, std::string>::iterator it = anotherMap.begin();
+        auto it2 = anotherMap.begin();
 
-        // std::pair<int, std::string>& entry1 = *it;  // Why this line DOES NOT compile ???
-
+        std::pair<const int, std::string>& entry1 = *it;  // Why this line DOES NOT compile ???
+                                                    // Type Deduction  // Typableitung
         auto& entry2 = *it;
     }
 
@@ -67,8 +78,61 @@ namespace Auto_Examples {
 
     static auto sum(float f1, float f2)
     {
-        return f1 + f2;
+        return f1 + f2;  // double ???
     }
+
+    static auto sum2(short s1, short s2)
+    {
+        return s1 + s2;
+    }
+
+    // Whyyyyyyyyyyyyyyyyyyyyyyy
+    //auto tueWas(bool flag, float value1, double value2) -> double
+    //{
+    //    if (flag) {
+    //        return value2;
+    //    }
+    //    else {
+    //        return value1;    // Bei jedem Return: Typ Gleichheit !!!
+    //    }
+    //}
+
+    template <typename T1, typename T2>
+    auto tueWas(bool flag, T1 value1, T2 value2) ->  decltype (value1 + value2)
+    {
+        if (flag) {
+            return value2;
+        }
+        else {
+            return value1;    // Bei jedem Return: Typ Gleichheit !!!
+        }
+    }
+
+    template <typename T1, typename T2>
+    decltype (  std::declval<T1>() + std::declval<T2>() )
+        tueWas2(bool flag, T1 value1, T2 value2)
+    {
+        if (flag) {
+            return value2;
+        }
+        else {
+            return value1;    // Bei jedem Return: Typ Gleichheit !!!
+        }
+    }
+
+    void test_seminar()
+    {
+        auto result2 = tueWas2(false, 100l, 200ll);  // Classic C++
+    }
+
+
+
+
+
+
+    // short hat 16 Bytes als Speicher // weniger als int
+    // Hat eine "übliche" CPU eine short-Arithmetik?  NEIN
+
 
     static auto foo(bool flag, float f, double d) -> double
     {
@@ -148,22 +212,28 @@ namespace Auto_Examples {
         Person(const std::string& name) : m_name(name) {}
 
         // getter
-        const std::string& getName() { return m_name; }
+        // std::string getName() { return m_name; }  // not really good
+        const std::string& getName() { return m_name; }  // thrilling
     };
+
+    // Ist Zeile 216 optimal ... bzw. war ist zu beachten:
+    // A) Person p;  // m_name
+    // B) const std::string& name = p.getName();
+    // Dangling Referenz
 
     static void test_06() {
 
         Person hans{ "Hans" };
 
-        auto name1{ hans.getName() };
+        auto name1 = hans.getName();   // Kopie
         std::println("Message: {}", name1);
 
         // but:
-        const auto& name2{ hans.getName() };
+        const auto& name2{ hans.getName() };   // Const Ref
         std::println("Message: {}", name2);
 
         // Ohhh:
-        auto& name3{ hans.getName() };
+        auto& name3{ hans.getName() };    // Quellcode: Ref // Aber ist auch const Ref
         std::println("Message: {}", name3);
 
         // or:

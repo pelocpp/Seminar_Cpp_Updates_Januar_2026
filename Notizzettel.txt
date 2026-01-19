@@ -1,7 +1,188 @@
 // ==================================================
 
-Seminar "C++ Uodates"
+Seminar "C++ Updates"
 
 Peter Loos
 
+30+ Jahre SW:
+
+i) Development (C/C++)
+
+   Back-to-the-Roots: C/C++
+
+   Java, C#, JavaScript, Mobile Apps (Java, Android, Flutter, Dart)
+
+   Not really: Python
+
+   Training / Schulung
+
+   Back-to-the-Roots: C/C++
+
+   C++ 11: 14, 17, 20, 23, 26 (Reflection)
+
 // ==================================================
+
+10.30   // 15.00
+
+Mittag:  12.30 // 17 Uhr
+
+// ==================================================
+
+2 Tools:
+
+i) Visual Studio Community (2022 / 2026)  // kostenlos
+
+ii) Github
+
+https://github.com/pelocpp
+
+https://github.com/pelocpp/cpp_modern/blob/master/Readme.md
+
+// ============================================================
+
+Was sind meine Erwartungen
+
+Was muss drin sein ???
+
+Was bringe ich mit (C#, Java, ....)  // andere Sprachen
+
+C, C#,.NET, (Java), Mobile App (Flutter), Lisp
+
+Überblick, Alles Neue, 
+
+// ============================================================
+
+ToDo:
+
+== Concepts
+
+== Multithreading (Überblick)
+
+== noexcept
+
+== emplace
+
+// ============================================================
+
+Modern C++: Rote Faden 
+
+==============================================================
+
+Referenz: Alias  // Name // Ohne Namen
+
+==> Hat etwas einen Namen:  Später kann da noch darauf zugegriffen werden
+
+==> Hat etwas keinen Namen:  Später kann da NICHT MEHR darauf zugegriffen werden
+
+RValue: Whyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy ???  Move - Semantik
+
+=================================================================
+
+ Move - Semantik:
+
+ ...: 0x000001de0c4e5 500    // am Stack // wird zerstört
+ ...: 0x000001de0c4e5 0a0    // Im Vector
+
+=================================================================
+
+
+Java, C#:
+
+   == Referenz-Semantik
+
+         BigData db = new BigData (...);   // Heap
+
+     Objekte am Stack: Gibt es nicht (C#: Nicht: class, sondern: struct)
+
+C++:
+
+   == Referenz-Semantik (new / Heap)
+
+         BigData* db = new BigData (...);   // Heap
+
+   == Werte-Semantik (Value-Semantik):  Stack
+
+         BigData db;
+
+         Werte-Semantik: Problem: Unnütze Kopien ....
+
+---------------------------
+
+...: 0x0000019b0d245 0a0
+
+if (ptr != NULL)
+   delete ptr;
+
+delete für NULL ist WOHL definiert
+
+// ???: free für NULL (C)
+
+
+Die Zeilen
+
+03:     m_data = data.m_data;   // shallow copy
+04:     m_size = data.m_size;
+05:     data.m_data = nullptr;  // reset source object, ownership has been moved
+06:     data.m_size = 0;
+
+sehen nach Standard aus:
+
+"Abkürzung":
+
+Swap-Idiom
+
+=====================================================
+
+auto:
+
+3 Facetten:
+-----------
+
+i)   Vereinbarung von Variablen
+
+ii)  Rückgabetyp
+
+iii) Parameter von Funktionen:   Kommt noch !!!
+
+=====================================================
+
+Paradigmen in C++:
+
+== OO Objekt-Orientierung
+
+== GP Generische Programmierung  (Templates)  // Alexander Alexandrowitsch Stepanow 
+
+== Bjarne Stroustrup (ohne Templates // C with Classes)
+
+C++:  Bibliothek  // STL  Standard Template Library
+
+
+=============================
+
+Für viele Standard-Typen gibt es eine vordefinierte Konvertierung in einen Ergebnistyp:
+
+short + int => int
+float + double => double
+
+===========================================
+
+Verlust von const und & (Referenz) bei auto
+
+===========================================
+
+Initialisierung:
+
+Re-Design:  Neue Syntax
+
+        double d1 = ival;      // Compiles  // impliziter Cast
+00007FF6975637F0  cvtsi2sd    xmm0,dword ptr [ival]  
+00007FF6975637F5  movsd       mmword ptr [d1],xmm0  
+
+CVTSI2SD — Convert Doubleword Integer to Scalar Double Precision Floating-Point Value
+
+Das ist ein TEURER Befehl !!!!!!!!
+
+double d2{ 123 };
+00007FF6424837FA  movsd       xmm0,mmword ptr [__real@405ec00000000000 (07FF6426C96C8h)]  
+00007FF642483802  movsd       mmword ptr [d2],xmm0  
+

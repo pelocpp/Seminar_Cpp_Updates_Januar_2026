@@ -1,6 +1,6 @@
 // =====================================================================================
 // LValue / RValue
-// =====================================================================================
+// ===================================================================================== 
 
 module modern_cpp:rvalue_lvalue;
 
@@ -12,30 +12,39 @@ namespace LValueRValue {
     }
 
     // rvalue reference
-    static void sayHello(std::string&& message) {
+    static void sayHello(std::string && message) {
         std::println("sayHello [std::string&&]: {}", message);
     }
 
     static void test01() {
 
         std::string a = "Hello";
+
         std::string b = " World";
 
+      //  std::string tmp = a + b;
+
         sayHello(a);
-        sayHello(a + b);
+
+        sayHello(a + b);   // Konkatenation: "Hello World"
+
+                             // a+b temp. Objekt  // Name
     }
 
     // -------------------------------------------------------------------
 
     static void helper(std::string&& message)
     {
-        sayHello(message);
-        // sayHello(std::move(message));    // casting an lvalue to an rvalue
+        // sayHello(message);    // sayHello &&:   Typen sind gleich
+                              // sayHello &:    Objekt hat einen Namen bekommen
+    
+        sayHello( std::move( message ) );    // 
+                              // 
     }
 
     static void test02()
     {
-        helper(std::string("Where are we going ..."));
+        helper( std::string("Where are we going ...") );  // temp. Objekt
     }
 
     // -------------------------------------------------------------------

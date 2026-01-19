@@ -13,16 +13,25 @@ namespace BraceInitialization {
         double dval{ 123.456 };
         int ival{ 123 };
 
-        double d1 = ival;      // Compiles
-        // double d2{ ival };  // Error: "conversion from 'int' to 'double' requires a narrowing conversion"
-    }
+        double d1 = ival;      // Compiles  // impliziter Cast
+        
+        double d2{ 123 };
+
+        double d3{ (double) ival };  // Error: "conversion from 'int' to 'double' requires a narrowing conversion"
+    }                                 // expliziter Cast
 
     // =================================================================================
     // built-in types: default initialization of miscellaneous variables
 
     static void test_01()
     {
+
+
+        int m = 1;
+
         int n{};                   // n equals 0
+        
+        
         float f{};                 // f equals 0.0
         double d{};                // d equals 0.0
         unsigned long l{};         // l equals 0
@@ -41,7 +50,10 @@ namespace BraceInitialization {
 
     static void test_02()
     {
+        int m = 1;
+
         int n{ 1 };                // n equals 1
+        
         float f{ 2.5f };           // f equals 2.5
         double d{ 3.5 };           // d equals 3.5
         unsigned long l{ 4l };     // l equals 4
@@ -104,7 +116,7 @@ namespace BraceInitialization {
         int m_b;
 
     public:
-        Class(int a, int b) : m_a{ a }, m_b{ b } {}
+        Class(int a, int b) : m_a{ a }, m_b{ b } {}   // C'tor
     };
 
     static void test_05()

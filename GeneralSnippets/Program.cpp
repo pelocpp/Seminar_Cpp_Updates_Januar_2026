@@ -29,10 +29,10 @@ int main()
         //main_array();
         //main_array_decay();
         //main_attributes();
-        //main_auto();
+       // main_auto();
         //main_back_inserter();
         //main_bind();
-        //main_brace_initialization();
+        main_brace_initialization();
         //main_casts();
         //main_common_type();
         //main_concepts_requires_classes();
