@@ -184,19 +184,19 @@ namespace ConstExprClassesAndObjects {
         constexpr Complex c2{ 3.0, 3.0 };
 
         constexpr float r1{ c1.real() };
-        constexpr Complex c3{ c1 + c2 };
-        constexpr float r2{ c3.real() };
+        /*constexpr*/ Complex c3{ c1 + c2 };
+        //constexpr float r2{ c3.real() };
 
-        // verify 'constness' with the help of disassembly and
-        // https://www.h-schmidt.net/FloatConverter/IEEE754de.html
-        
-        std::println("Real: ", c3.real());
-        std::println("Imag: ", c3.imag());
+        //// verify 'constness' with the help of disassembly and
+        //// https://www.h-schmidt.net/FloatConverter/IEEE754de.html
+        //
+        //std::println("Real: ", c3.real());
+        //std::println("Imag: ", c3.imag());
 
-        // verify compile time computing
-        static_assert (c1.real() == 1.0, "real part shoud be 1.0");
-        static_assert (c3.real() == 4.0, "real part shoud be 4.0");
-        static_assert (c3.imag() == 5.0, "imaginary part shoud be 5.0");
+        //// verify compile time computing
+        //static_assert (c1.real() == 1.0, "real part shoud be 1.0");
+        //static_assert (c3.real() == 4.0, "real part shoud be 4.0");
+        //static_assert (c3.imag() == 5.0, "imaginary part shoud be 5.0");
     }
 }
 
@@ -216,7 +216,7 @@ namespace ConstExprDynamicData {
 
     static void testDynamicData()
     {
-        constexpr int sum{ naiveSum(10) };
+        constexpr int sum{ naiveSum(100) };
         std::println("Sum from 1 up to 10: {}", sum);
     }
 }

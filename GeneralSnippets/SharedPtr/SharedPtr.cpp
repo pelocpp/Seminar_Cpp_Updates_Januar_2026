@@ -15,11 +15,18 @@ module;
 #endif
 #endif  // _DEBUG
 
+#include <memory>
+#include <print>
+
 module modern_cpp:shared_ptr;
 
 namespace SharedPointer {
 
     static void test_01() {
+
+        //std::shared_ptr<int> ptr111;
+        //std::shared_ptr<int> ptr222;
+        //ptr111 = ptr222;
 
         // 'ptr1' is a shared pointer for a new instance of an int
         std::shared_ptr<int> ptr1{ new int{ 123 } };
@@ -73,7 +80,7 @@ namespace SharedPointer {
     }
 
     // note: play with 'call-by-value' or 'call-by-reference'
-    static void storeSharedPointer(std::shared_ptr<int> ptr)
+    static void storeSharedPointer(std::shared_ptr<int>& ptr)
     {
         std::println("Inner scope: {}", ptr.use_count());
     }

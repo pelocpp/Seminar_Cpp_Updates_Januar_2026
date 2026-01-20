@@ -44,7 +44,7 @@ constexpr auto crcTable{
 constexpr auto tableBy10 = crcTable<10>;
 constexpr auto tableBy20 = crcTable<20>;
 
-static constexpr auto calcCRC(std::string_view data) {
+static constexpr auto calcCRC(std::string_view data) {   // char const* + Length
     uint8_t checksum{};
     auto len{ data.size() };
     for (size_t i{}; i != len; ++i) {

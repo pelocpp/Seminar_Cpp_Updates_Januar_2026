@@ -36,7 +36,7 @@ int main()
         //main_casts();
         //main_common_type();
         //main_concepts_requires_classes();
-        main_concepts_requires_functions();
+        //main_concepts_requires_functions();
         //main_const_variants();
         //main_constexpr();
         //main_constexpr_crc();
@@ -82,7 +82,7 @@ int main()
         //main_regular_expressions();
         //main_rvalue_lvalue();
         //main_sfinae();
-        //main_shared_ptr();
+       // main_shared_ptr();
         //main_source_location();
         //main_sso();
         //main_static_assert();
@@ -97,10 +97,10 @@ int main()
         //main_to_underlying();
         //main_transform();
         //main_tuple(); 
-        main_two_phase_name_lookup();
+        //main_two_phase_name_lookup();
         //main_type_erasure();
         //main_type_traits();
-        //main_unique_ptr();
+     //   main_unique_ptr();
         //main_variadic_templates_introduction();
         //main_variadic_templates_working_on_every_argument();
         //main_variadic_templates_sum_of_sums();
@@ -108,7 +108,7 @@ int main()
         //main_variant();
         //main_virtual_base_class_destructor();
         //main_virtual_override_final();
-        //main_weak_pointer();
+        main_weak_pointer();
 
         //main_exercises();
     }

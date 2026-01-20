@@ -56,8 +56,6 @@ ToDo:
 
 == Concepts: Check
 
-== Multithreading (Überblick)
-
 == noexcept
 
 == emplace
@@ -73,9 +71,11 @@ ToDo:
 
 == Folding
 
-== Utility Classes
+== Utility Classes // std::initializer_list
 
 == std::variant
+
+== Multithreading (Überblick)
 
 == Bookstore Fallstudie
 
@@ -371,3 +371,283 @@ Klassischen dynamischen Polymorphismus ==> statischer Polymorphismus.
 Pro // Contra
 
 // ==============================================================
+
+constexpr
+
+        constexpr Complex c3{ c1 + c2 };
+00007FF617BF5DF0  movss       xmm0,dword ptr [__real@40800000 (07FF617E32FFCh)]  
+00007FF617BF5DF8  movss       dword ptr [c3],xmm0  
+00007FF617BF5E00  movss       xmm0,dword ptr [__real@40a00000 (07FF617E33000h)]  
+00007FF617BF5E08  movss       dword ptr [rbp+8Ch],xmm0  
+
+        /*constexpr*/ Complex c3{ c1 + c2 };
+00007FF61B965C0F  lea         r8,[c2]  
+00007FF61B965C13  lea         rdx,[c3]  
+00007FF61B965C1A  lea         rcx,[c1]  
+00007FF61B965C1E  call        ConstExprClassesAndObjects::Complex::operator+ (07FF61B8C3485h)  
+
+Wie kann ich das gebrauchen ???????????????
+
+// Kleinere Sachen gebrauchen
+
+
+    class Color
+    {
+    private:
+        std::uint8_t m_r;
+        std::uint8_t m_g;
+        std::uint8_t m_b;
+
+    public:
+        constexpr explicit Color(std::uint8_t r, std::uint8_t g, std::uint8_t b)
+            : m_r(r), m_g(g), m_b(b)
+        {
+        }
+
+        constexpr explicit Color(const std::string_view s)   "#00FF00"
+            : Color(parse(s))
+        {
+        }
+
+        constexpr Color(const Color& rhs) = default;
+        constexpr Color& operator= (const Color& rhs) = default;
+
+    private:
+        static constexpr Color parse(std::string_view str)
+        {
+            if (str.size() != 7) {
+                return Color{ 0, 0, 0 };
+            }
+            else if (str[0] != '#') {
+                return Color{ 0, 0, 0 };
+            }
+            else {
+
+            }
+
+            std::string_view svR{ str.substr(1, 2) };
+            std::string_view svG{ str.substr(3, 2) };
+            std::string_view svB{ str.substr(5, 2) };
+
+            auto r{ byte(svR) };
+            auto g{ byte(svG) };
+            auto b{ byte(svB) };
+
+            if (r.has_value() && g.has_value() && b.has_value()) {
+                return Color{ r.value() , g.value() , b.value() };
+            }
+            else {
+                return Color{ 0, 0, 0 };
+            }
+        }
+
+        // decode a nibble
+        static constexpr std::optional<std::uint8_t> nibble(char n) {
+            if (n >= '0' && n <= '9') {
+                return n - '0';
+            }
+            else if (n >= 'a' && n <= 'f') {
+                return n - 'a' + 10;
+            }
+            else if (n >= 'A' && n <= 'F') {
+                return n - 'A' + 10;
+            }
+            else {
+                return std::nullopt;
+            }
+        }
+
+        // decode a byte
+        static constexpr std::optional<std::uint8_t> byte(std::string_view sv) {
+            auto upperNibble = nibble(sv[0]);
+            auto lowerNibble = nibble(sv[1]);
+
+            if (lowerNibble.has_value() && upperNibble.has_value()) {
+                return upperNibble.value() << 4 | lowerNibble.value();
+            }
+            else {
+                return std::nullopt;
+            }
+        }
+
+    public:
+        // getter
+        constexpr std::uint8_t GetRValue() const { return m_r; };
+        constexpr std::uint8_t GetGValue() const { return m_g; };
+        constexpr std::uint8_t GetBValue() const { return m_b; };
+
+        constexpr std::uint32_t value() const
+        {
+            return
+                static_cast<std::uint32_t> (m_r) |
+                static_cast<std::uint32_t> (m_g) << 8 |
+                static_cast<std::uint32_t> (m_b) << 16;
+        }
+    };
+
+
+    constexpr Color red ("#FF0000");  // Übersetzer
+
+    Wie kann ich das anwenden ....
+
+    a) Tabellen
+    
+    b) Mittelgroße Funktionalitäten (nicht zwingend Runtime)
+
+       zB  RGB Farbwerte.
+
+    Fan-Gemeinde
+
+    std::vector ==> Daten Heap.
+
+=========================================================
+
+== Smart Pointer
+
+std::unique_ptr // std::shared_ptr
+
+C++:   / C#, Java :  new
+
+C#, Java: Wenig Problembehaftet:  Freigabe des Speichers:  Garbage Collecting
+
+C++: no GC, Operator delete
+
+Theorie: Nicht Problembehaftet
+
+Praxis: Was ist , wenn delete nicht ausgeführt wird ????????????????
+
+for ...
+   if  ....
+       new ...
+       break;
+
+Andere Idee // Lösung:
+
+== Man verstecke Zeiger (new) in einem Hüllenobjekt
+
+== Objekte: OO - Konstruktoren, Destruktor
+
+== Wann wird der Destruktor aufgerufen: 
+
+{
+    Rectangle rect;  // Stack
+
+
+
+}   <=== rect:  Destruktor
+
+
+// --------
+
+{
+    int* n = new int();
+    Wrapper w (n);  // Stack
+
+
+
+}   <=== w:  Destruktor ==> delete n;
+
+== Weitere Fragen: Kann man die Hülle auch bewegen aus dem Scope raus ...
+
+== auto_ptr:  Deprecated
+
+Redesign: Mehrere neue Klassen
+
+std::unique_ptr:
+
+== Kapselt einen Zeiger
+== Kann im laufenden Programm zu EINEM Zeitpunkt nur EINEN Besitzer haben.
+
+   up1 = up2;   // No // ERROR Compile Time
+
+std::shared_ptr
+
+== Kann im laufenden Programm zu EINEM Zeitpunkt MEHRERE Besitzer haben.
+== Anderen delete-Strategie:  Der erste Destruktor kann (nicht immer) den delete aufrufen
+== Referenz-Zähler 0 => 1 => 2 => 1 => 2 => 1 => 0: delete
+
+// ====================================================
+
+std::move auf einen int-Wert ????
+
+a) std::move ist konzipiert für OBJEKTE
+
+   => Vor allem für Objekte mit ZEIGERN
+
+b) Dennoch: Was passiert mit int-Werten in solchen Objekten.
+
+   => Automatisch erzeugte Move: Kopie
+
+   => Frage: Wird der alte Wert auf 0 gesetzt oder nicht ???
+
+   Depends:
+
+ =====================================================
+
+Shared Ptr:
+
+Tut NICHT den Speicher am HEAP kopieren.
+
+Wenn ich das aber wollte :
+
+Klasse, die das kann: std::vector
+
+============================================================
+
+Achtung // Vorsicht:
+
+std::shared_ptr funktioniert nicht IMMER !?!?!?!?!?!?!
+
+Der Speicher wird nicht IMMER freigegeben !!!
+
+a) std::weak_ptr
+
+b) Ist nicht wirklich ein Thema von C++
+
+
+Observer - Pattern:
+--------------------
+
+a) Objekt mit DATEN // Wetter-Daten // Aktien-Kurse
+
+   Observable
+
+   ändern.
+
+b) Beobachter // Observer
+
+i) Ein Observer kennt das Observable, wenn es sich dort anmelden möchte.
+
+ii) Ein Observable kennt seine Observer, um diese bei Änderungen im Datenobjekt zu informieren.
+
+std::shared_ptr:  NUR, wenn ich Besitzer sein will 
+
+std::weak_ptr: Für Verwendung des Zeigers, aber OHNE Besitzanspruch.
+
+int* ptr = new ...;
+
+ptr KOPIEREN ...
+
+=========================================================
+
+===> 2 Objekte + Threads
+
+A) std::shared_ptr als Member: passt.
+
+B) std::weak_ptr: als Member: NEVER, lokal: YES
+
+C) std::weak_ptr ==> lock:
+
+    a1) nullptr: Unwahrscheinlich, weil der std::shared_ptr ein  Member ist
+    a2) != nullptr: aktiver std::shared_ptr: 
+
+D) Destruktor von der umgebenden Klasse:
+
+   std::shared_ptr: 1 => 0
+
+E) Vorteil: Muss im Destruktor von der umgebenden Klasse KEIN delete haben.
+
+
+
+ 11:10
+ -----
