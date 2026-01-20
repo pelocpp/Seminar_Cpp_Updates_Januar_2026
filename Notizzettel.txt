@@ -4,6 +4,17 @@ Seminar "C++ Updates"
 
 Peter Loos
 
+peter.loos@gmx.de
+-----------------
+
+===================================================
+
+https://github.com/pelocpp
+
+https://github.com/pelocpp/cpp_modern/blob/master/Readme.md
+
+=====================================================
+
 30+ Jahre SW:
 
 i) Development (C/C++)
@@ -955,9 +966,45 @@ acquire // release
 
 ===========
 
-15:40
-=====
+std::variant<int, double, std::string> v{ 123 }
+
+Kann mehrere Werte haben / halten, aber zu einem Zeitpunkt nur EINEN Wert.
+
+Excel // Google Sheets:
+
+Zelle // Cell:
+
+Werte / Datentyp: num. Wert, Zeichenkette, Datum, Zeit, Currency, Gleitpunkt ...
+
+// =================================================
+
+Type Traits :: == Reflection für Arme.
+
+====================================================
+
+Ein neues if:
+
+Klassische:  if  - Runtime:                          Bedingung auswerten.
+
+if_compile_time:   Compile Time // Übersetzungszeit: Bedingung auswerten.
+
+====================================================
 
 
 
+Java, C#: ArrayList (Object):  Heterogene Conteiner  // Kritik
 
+C++: Homogene Container
+
+    std::vector<T>:
+
+Frage: Beobachtung:
+
+        std::vector<std::variant<int, long, long long, float, double>>
+            vec = { 100, 200l, 300ll, 400.5f, 500.5 };
+
+Homogen oder Heterogen:
+
+==> Optionen.
+
+Strenge Antwort: Homogen.

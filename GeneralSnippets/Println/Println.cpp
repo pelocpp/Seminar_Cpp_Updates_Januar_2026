@@ -10,7 +10,7 @@ module;
 module modern_cpp:println;
 
 // defines for custom formatting
-// #define StdFormatter_01_Basic_Formatter_API
+#define StdFormatter_01_Basic_Formatter_API
 // #define StdFormatter_02_Parsing_Format_String
 // #define StdFormatter_03_Delegating_Formatting_to_Standard_Formatters
 // #define StdFormatter_04_Inheriting_From_Standard_Formatters
@@ -162,6 +162,7 @@ namespace std
 {
     using namespace Formatting_Examples_Revised;
 
+    // template specialization
     template<>
     struct formatter<SimpleClass>
     {

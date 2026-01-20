@@ -2,6 +2,10 @@
 // Variant.cpp // std::variant
 // =====================================================================================
 
+module;
+
+#include <variant>
+
 module modern_cpp:variant;
 
 namespace VariantDemo {
@@ -109,13 +113,54 @@ namespace VariantDemo {
 
     // -------------------------------------------------------------------
 
+    // primary template
+    template <class T>
+    struct my_remove_reference {
+        using type = T;
+    };
+
+    // Erste Template Spezialisierung
+    template <>
+    struct my_remove_reference<int> {
+        using type = int;
+    };
+
+    // Zweite Template Spezialisierung
+    template <class T>
+    struct my_remove_reference<T&> {
+        using type = T;
+    };
+
+
+
     static void test_04() {
 
         std::variant<int, double, std::string> v{ 123 };
 
         // using a generic visitor (matching all types in the variant)
         auto visitor = [](const auto& elem) {
-            std::println("{}", elem);
+
+            using ElemType = decltype (elem);
+            using ElemTypeWithoutRef = my_remove_reference<ElemType>::type;
+            using ElemTypeWithoutRefAndConst = std::remove_const<ElemTypeWithoutRef>::type;
+
+            if constexpr(std::is_same <ElemTypeWithoutRefAndConst, int>::value == true)
+            {
+                std::println("int: {}", elem);
+            }
+            else if constexpr (std::is_same <ElemTypeWithoutRefAndConst, double>::value == true)
+            {
+                std::println("double: {}", elem);
+            }
+            else if constexpr (std::is_same <ElemTypeWithoutRefAndConst, std::string>::value == true)
+            {
+                std::println("std::string: {}", elem);
+                auto length = elem.size();
+                std::println("Length: {}", length);
+            }
+            else{
+                std::println("Unbekannt:  {}", elem);
+            }
         };
 
         std::visit(visitor, v);
@@ -143,6 +188,44 @@ namespace VariantDemo {
         void operator() (const std::string& s) {
             std::println("const std::string&: {}", s);
         }
+
+        //// primary template
+        //template <typename T>
+        //void operator() (T n) {
+        //    std::println("T: {}", n);
+        //}
+
+        //// specializations
+        //template <>
+        //void operator() <int>  (int n) {
+        //    std::println("int: {}", n);
+        //}
+
+        //template <>
+        //void operator() <double> (double n) {
+        //    std::println("double: {}", n);
+        //}
+
+        //template <>
+        //void operator() <std::string> (std::string n) {
+        //    std::println("const std::string&: {}", n);
+        //    std::println("Size:               {}", n.size());
+        //}
+
+        //template<>
+        //auto operator() < int > (int x, int y) {
+        //    std::cout << "x=" << x << ", y=" << y << std::endl;
+        //}
+
+        //template<>
+        //auto operator() < double > (double x, int y) {
+        //    std::cout << "x=" << x << ", y=" << y << std::endl;
+        //}
+
+        //template<>
+        //auto operator() < std::string > (std::string x, int y) {
+        //    std::cout << "x=" << x << ", y=" << y << std::endl;
+        //}
     };
 
     static void test_05() {
@@ -337,17 +420,17 @@ void main_variant()
 {
     using namespace VariantDemo;
 
-    test_01();
-    test_02();
-    test_03();
-    test_04();
-    test_05();
-    test_06();
+    //test_01();
+    //test_02();
+    //test_03();
+    //test_04();
+    //test_05();
+    //test_06();
     test_07();
-    test_08();
-    test_09();
-    test_10();
-    test_11();
+    //test_08();
+    //test_09();
+    //test_10();
+    //test_11();
 }
 
 // =====================================================================================
