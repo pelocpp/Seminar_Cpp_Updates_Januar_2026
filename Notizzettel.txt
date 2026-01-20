@@ -56,22 +56,24 @@ ToDo:
 
 == Concepts: Check
 
-== noexcept
+== noexcept: Check
 
-== emplace
+== emplace: Check
 
 2. Tag:
 -------
 
-== constexpr
+== constexpr: Check
 
-== Smart Pointer
+== Smart Pointer: Check
 
-== Varadische Templates
+== std::initializer_list: Check
 
-== Folding
+== Varadische Templates: Check
 
-== Utility Classes // std::initializer_list
+== Folding: Check
+
+== Utility Classes
 
 == std::variant
 
@@ -648,6 +650,314 @@ D) Destruktor von der umgebenden Klasse:
 E) Vorteil: Muss im Destruktor von der umgebenden Klasse KEIN delete haben.
 
 
+===========================================
 
- 11:10
- -----
+Varadische Templates
+--------------------
+
+== Wie
+
+== Warum
+
+== Auch für uns relevant
+
+Beispiel:
+
+Weitere Technik: "Folding"
+
+Hochperformantes Auswerten von Ausdrücken (mit Operatoren).
+
+Einschränkung: Es muss DERSELBE Operator sein.
+
+int sum = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8;
+
+int sum = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8;
+
+2 Schritten: 
+
+a) Wie bekomme ich beliebig viele Werte in ein Unterprogramm.
+
+b) Technik des Folding.
+
+
+====================================================
+
+std::initializer_list:       STACK
+
+std::vector:                 HEAP
+
+Regelfall: Über den Stack geht es SCHNELLER
+
+
+Stolperfalle:
+-------------
+
+std::vector<int> vec( 10 );  // Size: 10 - alle Werte: 0
+
+vs.
+
+std::vector<int> vec{ 10 };  // Size: 1  - Wert: 10
+
+
+std::initializer_list:  Tool für Performanz
+std::string_view
+
+=====================================================
+
+
+Parameter Pack: Was heißt eigentlich Auspacken:
+
+== Ein Komma-getrennte Liste erzeugen.  // Syntax  // Aufruf einer Methode // std::initializer_list
+
+
+=====================================================
+
+Wozu gibt es in C++ die variadischen Templates??
+
+Tranport von Daten von A nach B  // Hoch-Performant.
+
+Beispiel:
+
+
+make_unique
+
+make_tuple
+
+std::thread ... Parameter
+
+make_shared
+ 
+emplace
+
+=====================================================
+
+push_back:            Zwei Objekte benötigt haben (Kopie) ==> Einfügen
+
+push_back (RValues):  Zwei Objekte benötigt haben (Kopie), eines sehr schnell erzeugbar (Move)
+
+emplace:              Ein Objekt - mit passendem Konstruktoraufruf
+
+Transport der Daten (Parameter / emplace) von A nach B (passende Konstruktoraufruf)
+
+=====================================================
+
+Perfektes Weiterleiten:
+
+    template <typename T>
+    void forwarding(T&& arg) {      // make_unique
+        overloaded(arg);            // c'tor Unknown (&&),  c'tor Unknown (&)
+    }
+
+Was ist T&&
+
+a) Vermutung: RValue Referenz:  FALSCH 
+
+b) Universal Referenz;
+
+============================================================
+
+Hinweis:
+
+Martizen:  
+
+Matrix m1 = m2 + m3 + m4;
+
+Expression Templates für Matrizen :)
+
+============================================================
+
+Utility Classes:
+
+std::string_view
+----------------
+
+Wozu ????????????
+
+
+std::optional<int>
+
+int n = 123;
+// n = Sensorik();
+
+Hat n überhaupt einen gültigen Wert ???
+
+n = 0;
+
+n = -1;
+
+n = - Max_Integer;
+
+Paar:
+
+int n;
+bool isValid;
+
+std::optional<int> n;
+
+n = 0;
+
+n = std::nullopt;
+
+std::tuple: Hält n Werte
+
+std::pair:  Hält 2 Werte
+
+std::tuple<char, int, double> values{ 'Z', 987, 987.654 };
+
+DTO:  Data Transfer Object
+
+Struktur:
+
+Ein Tuple ist wie eine Struktur - nur für Schreibfaule.
+
+auto value1{ std::get<0>(values) };
+auto value2{ std::get<1>(values) };
+auto value3{ std::get<2>(values) };
+
+
+std::tuple<char, int, double> values{ 'Z', 987, 987.654 };
+
+using MyData = std::tuple<char, int, double>;
+
+// typedef ............
+
+typename <typename T>
+using MyData = std::tuple<char, int, T>;
+
+15 Minuten:
+
+Überblick Multi-Threading.
+-------------------------
+
+https://github.com/pelocpp/cpp_concurrency
+
+Klasse std::thread  // C++
+
+Windows:  Win32:  CreateThread function
+
+    static void function(int value) {
+
+        std::thread::id tid{ std::this_thread::get_id() };
+        Logger::log(std::cout, "tid:  ", tid);
+
+        for (size_t i{}; i != NumIterations; ++i) {
+            Logger::log(std::cout, "in thread ", value);
+            std::this_thread::sleep_for(std::chrono::seconds{ 1 });
+        }
+
+        Logger::log(std::cout, "Done Thread.");
+    }
+
+    HIER ist VOID angesagt.
+
+--------------
+
+std::async: Startet evenfalls einen Thread.
+
+        std::future<std::string> futureFunction = 
+            std::async( hello, "function");
+
+std::future: Ist ein Datenkanal zwischen Thread und Thread-Erzeuger:
+
+A) mit 'return' wird in den Datenkanal geschrieben.
+
+B) Aus dem Datenkanal wird mit 'get' gelesen.
+
+Wer ist zuerst aktiv: Weiß man nicht.
+
+ 'get'  ==> Blocking oder Non-Blocking.
+
+         do
+        {
+            status = future.wait_for(std::chrono::seconds{ 1 });
+
+            switch (status)
+            {
+            case std::future_status::deferred:
+                Logger::log(std::cout, "Deferred");
+                break;
+            case std::future_status::timeout:
+                Logger::log(std::cout, "Timeout");
+                break;
+            case std::future_status::ready:
+                Logger::log(std::cout, "Ready");
+                break;
+            }
+        }
+        while (status != std::future_status::ready);
+
+The function template std::async runs the function f asynchronously
+(in a separate thread which might be a part of a thread pool)
+and returns a std::future that will eventually hold the result of that function call.
+
+Win32: Thread Pool API.
+
+int n;
+
+Mehrere Threads: n lesen oder schreiben.
+
+std::atomic<T> löst das Problem des atomaren Zugriffs.
+
+std::atomic<T> :   load   // save 
+
+=====================================
+
+Klasse std::mutex
+Klasse std::recursive_mutex
+Klasse std::shared_mutex
+
+Nicht Direkt, sondern nur mit HÜLLEN-Objekten.
+
+std::mutex m;
+
+m.lock();
+..
+m.unlock();
+
+
+
+{
+    std::lock_guard<std::mutex> guard (m);   // Konstruktors  // lock
+    ... Exception // break;
+}   Destruktor // unlock
+
+
+Aspekt der Koordination von Threads:
+
+obj.wait()
+
+obj.notify();
+
+std::condition_variable:  wait und notify
+
+===========
+
+std::latch  l (5);
+
+l.countDown();
+
+// .........
+
+
+l.wait();  
+
+== WaitForSingleObject
+
+== WaitForMultipleObjects
+
+===========
+
+Semaphore:
+
+Parkplatz: 10 Autos.
+
+acquire // release 
+
+===========
+
+15:40
+=====
+
+
+
+

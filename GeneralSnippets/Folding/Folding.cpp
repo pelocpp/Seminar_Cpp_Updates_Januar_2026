@@ -8,6 +8,162 @@ module;
 
 module modern_cpp:folding;
 
+namespace Folding_Seminar {
+
+    template <typename ... TArgs>
+    auto sum1(TArgs ... args) {              // pack , parameter pack
+        
+    //    args ...;                  // auspacken
+
+        // auto list = std::vector{ args ... };
+        auto list = std::initializer_list { args ... };
+
+        auto result = 0;
+
+        std::for_each(
+            list.begin(),
+            list.end(),
+            [&result](int value) {
+                result += value;
+            }
+        );
+
+        return result;
+    }
+
+    template <typename ... TArgs>
+    auto sum2(TArgs ... args) {              // pack , parameter pack
+
+        // ((pack1 op pack2) op ...) op packN
+        // int sum = (a1 + a2) + a3 + a4 + a5 + a6 + a7 + a8;
+        auto result = ( ... + args );   // Folding Ausdruck  // 1 : 10
+
+        return result;
+    }
+
+
+    template <typename ... TArgs>
+    auto subtrahierer(TArgs ... args) {              // pack , parameter pack
+
+        // 1 - 2 - 3
+        // (1 - 2) - 3 = -4
+        // 1 - (2 - 3) = +2  
+
+        auto result = (args -  ... );
+
+        return result;
+    }
+
+    void test_seminar_folding() {
+
+        int a1 = 1;
+        int a2 = 2;
+        int a3 = 3;
+        int a4 = 4;
+        int a5 = 5;
+
+        auto result = sum1<int, int, int, int, int>(a1, a2, a3, a4, a5, 6, 7, 8, 9, 10 );  
+                       // bel. Werte: einpacken 1, 2, 3, 4 und 5
+                       // bel. Typen: int, 5 Mal
+
+        result = subtrahierer(1, 2, 3);
+    }
+
+    class Unknown
+    {
+    private:
+        int m_var1;
+        int m_var2;
+        int m_var3;
+
+    public:
+        Unknown() : m_var1{ -1 }, m_var2{ -1 }, m_var3{ -1 } {
+            std::cout << "c'tor()" << std::endl;
+        }
+
+        Unknown(int n) : m_var1{ n }, m_var2{ -1 }, m_var3{ -1 } {
+            std::cout << "c'tor(int)" << std::endl;
+        }
+
+        Unknown(int n, int m) : m_var1{ n }, m_var2{ m }, m_var3{ -1 } {
+            std::cout << "c'tor(int, int)" << std::endl;
+        }
+
+        Unknown(double d, int m) : m_var1{ (int) d }, m_var2{ m }, m_var3{ -1 } {
+            std::cout << "c'tor(double, int)" << std::endl;
+        }
+
+
+        Unknown(int n, int m, int k) : m_var1{ n }, m_var2{ m }, m_var3{ k } {
+            std::cout << "c'tor(int, int, int)" << std::endl;
+        }
+
+        friend std::ostream& operator<< (std::ostream&, const Unknown&);
+    };
+
+    std::ostream& operator<< (std::ostream& os, const Unknown& obj) {
+        os
+            << "var1: " << obj.m_var1
+            << ", var2: " << obj.m_var2
+            << ", var3: " << obj.m_var3;
+
+        return os;
+    }
+     
+    template <class T, typename ... TArgs>
+    std::unique_ptr<T> my_make_unique(TArgs& ... args) {
+
+        std::unique_ptr<T> tmp = std::unique_ptr<T>{ new T { args ... } };
+        return tmp;
+    }
+
+    template <class T, typename ... TArgs>
+    std::unique_ptr<T> my_make_unique2(const TArgs& ... args) {
+
+        std::unique_ptr<T> tmp = std::unique_ptr<T>{ new T { args ... } };
+        return tmp;
+    }
+
+    // Bessere Lösung: Perfekte Weiterleiten // Perfect Forwarding
+
+    void test_seminar_motivation_var_templates() {
+
+        std::unique_ptr <int> sp = std::make_unique<int>(123);
+
+        std::unique_ptr <Unknown> sp2 = std::make_unique<Unknown>(1, 2, 3);
+
+        std::unique_ptr <Unknown> sp3 = my_make_unique2<Unknown>(1, 2);
+
+        std::unique_ptr <Unknown> sp4 = my_make_unique2<Unknown>(1.5, 2);
+
+        int a = 1;
+        int b = 2;
+
+        std::unique_ptr <Unknown> sp5 = my_make_unique<Unknown>(a, b);
+
+    }
+
+    void test_seminar_motivation_var_templates_emplace() {
+    
+        std::vector<Unknown> vec;
+
+      //  vec.push_back ()
+
+        vec.emplace_back(1, 2, 3);
+    
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 namespace Folding {
 
     /* folding examples: introduction
@@ -209,6 +365,11 @@ namespace Folding {
 void main_folding()
 {
     using namespace Folding;
+    // Folding_Seminar::test_seminar_folding();
+
+    Folding_Seminar::test_seminar_motivation_var_templates_emplace();
+    return;
+
     test_01();
     test_02();
     test_03a();

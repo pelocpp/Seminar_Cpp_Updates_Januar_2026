@@ -6,12 +6,14 @@ module modern_cpp:perfect_forwarding;
 
 namespace PerfectForwarding {
 
-    static void overloaded(int& arg) {
+    static void overloaded(const int& arg) {
         std::println("By lvalue: {}", arg);
+        // arg sollte nicht verändert werden
     }
 
     static void overloaded(int&& arg) {
         std::println("By rvalue: {}", arg);
+        // Optimieren, weil anonymes Objekt
     }
 
     /*
@@ -19,8 +21,8 @@ namespace PerfectForwarding {
      */
 
     template <typename T>
-    void forwarding(T&& arg) {
-        overloaded(arg);
+    void forwarding(T&& arg) {      // make_unique
+        overloaded(arg);            // c'tor Unknown (&&),  c'tor Unknown (&)
     }
 
     template <typename T>
@@ -55,7 +57,7 @@ namespace PerfectForwarding {
 
         // T obj1 = std::forward<T>(arg1);
         // vs
-        T obj1 = arg1;
+        T obj1 = std::forward<T>(arg1);
         std::println("[{}]", arg1);
 
         U obj2 = std::forward<U>(arg2);
@@ -66,7 +68,7 @@ namespace PerfectForwarding {
     {
         std::string s{ "DEF" };
 
-        foo(std::string{ "ABC" }, s);
+        foo(std::string{ "ABC" }, s); 
     }
 }
 

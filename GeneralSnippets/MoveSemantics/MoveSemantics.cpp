@@ -40,6 +40,8 @@ namespace MoveSemantics {
 
     // c'tors and d'tor
     BigData::BigData() {
+        std::println("default c'tor");
+
         // empty buffer
         m_size = 0;
         m_data = nullptr;
@@ -174,8 +176,17 @@ namespace MoveSemantics {
     static void test_02_demonstrate_move_ctor() {
 
         std::vector<BigData> vec;   // Ähnlichkeit zu std::vector
+        vec.reserve(2);
 
-        vec.push_back(BigData(10, 1));
+        vec.push_back(BigData(10, 1));  // verschoben
+        vec.push_back(BigData(10, 1));  // verschoben
+
+        // BigData data(10, 1);
+        //vec.push_back(data);    // wird kopiert
+
+     //   vec.push_back(std::move(data));    // ginge auch verschieben ??? Ja, Wie?
+
+        // Bis zum Ende des UPs data nicht mehr anfassen !!!!!!!!!
     }
 
     static void test_03_demonstrate_move_assignment() {
@@ -206,11 +217,11 @@ namespace MoveSemantics {
 void main_move_semantics()
 {
     using namespace MoveSemantics;
-    test_01_move_semantics();
+    //test_01_move_semantics();
     test_02_demonstrate_move_ctor();
-    test_03_demonstrate_move_assignment();
-    test_04_demonstrate_move_assignment();
-    test_05_demonstrate_missing_noexept();
+    //test_03_demonstrate_move_assignment();
+    //test_04_demonstrate_move_assignment();
+    //test_05_demonstrate_missing_noexept();
 }
 
 // =====================================================================================

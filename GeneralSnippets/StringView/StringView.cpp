@@ -8,11 +8,15 @@ namespace StringViewDemonstration {
 
     static void test_01()
     {
+        auto cp = "AAAAAAAAAAAAAAAAAAAAAAAAAAAA";  // Code-Segment // Globales Datensegment
+                          // NIcHT: HEAP 
+
+        // read-only
         std::string_view sv{ "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" };  // Konstante Zeichenkette
 
-        std::string s{ "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" };        //  Heap
+        std::string s{ "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" };    //  Heap
 
-        // sv[0] = '?';   // error
+       // sv[0] = '?';   // error
         char ch{ sv[0] };
     }
 

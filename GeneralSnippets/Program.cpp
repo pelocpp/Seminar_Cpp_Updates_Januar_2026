@@ -51,13 +51,13 @@ int main()
         //main_exception_safety();
         //main_expected();
         //main_explicit_keyword();
-        //main_folding();
+       // main_folding();
         //main_functional_programming_ranges();
         //main_functional_programming();
         //main_functional_programming_alternate();
         //main_generate();
         //main_generic_functions();
-        //main_initializer_list();
+       // main_initializer_list();
         //main_input_output_streams();  
         //main_invoke();
         //main_lambdas();
@@ -69,9 +69,9 @@ int main()
         //main_metaprogramming_02(); 
         //main_modularized_standard_library(); 
         //main_modules();
-        //main_move_semantics();
+        main_move_semantics();
         //main_optional();
-        //main_perfect_forwarding();
+       // main_perfect_forwarding();
         //main_placement_new();
         //main_println();
         //main_raii();
@@ -108,7 +108,7 @@ int main()
         //main_variant();
         //main_virtual_base_class_destructor();
         //main_virtual_override_final();
-        main_weak_pointer();
+      //  main_weak_pointer();
 
         //main_exercises();
     }
